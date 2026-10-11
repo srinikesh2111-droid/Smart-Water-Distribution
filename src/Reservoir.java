@@ -2,14 +2,14 @@ public class Reservoir {
 
     private String id;
     private String name;
-    private int dailySupply;
+    private int capacity;
     private int remainingSupply;
 
-    public Reservoir(String id, String name, int dailySupply) {
+    public Reservoir(String id, String name, int capacity) {
         this.id = id;
         this.name = name;
-        this.dailySupply = dailySupply;
-        this.remainingSupply = dailySupply;
+        this.capacity = capacity;
+        this.remainingSupply = capacity;
     }
 
     public String getId() {
@@ -20,19 +20,32 @@ public class Reservoir {
         return name;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
     public int getRemainingSupply() {
         return remainingSupply;
     }
 
-    public boolean allocateWater(int litres) {
-        if (litres <= remainingSupply) {
-            remainingSupply -= litres;
-            return true;
-        }
-        return false;
+    public int allocateWater(int litres) {
+
+        int allocated = Math.min(litres, remainingSupply);
+
+        remainingSupply -= allocated;
+
+        return allocated;
     }
 
     public void resetDailySupply() {
-        remainingSupply = dailySupply;
+        remainingSupply = capacity;
+    }
+
+    public void displayDetails() {
+
+        System.out.println("Reservoir ID       : " + id);
+        System.out.println("Reservoir Name     : " + name);
+        System.out.println("Total Capacity     : " + capacity + " litres");
+        System.out.println("Remaining Supply   : " + remainingSupply + " litres");
     }
 }

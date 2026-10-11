@@ -35,4 +35,9 @@ public class Pipeline {
     public void repair() {
         working = true;
     }
+
+    public void displayDetails() {
+
+        System.out.println(id + " : " + from + " -> " + to +" Status: " + (working ? "Working" : "Failed"));
+    }
 }

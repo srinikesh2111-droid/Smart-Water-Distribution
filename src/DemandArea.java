@@ -1,8 +1,8 @@
-public class DemandArea {
+public abstract class DemandArea {
 
-    protected String id;
-    protected String name;
-    protected int demand;
+    private String id;
+    private String name;
+    private int demand;
 
     public DemandArea(String id, String name, int demand) {
         this.id = id;
@@ -22,7 +22,7 @@ public class DemandArea {
         return demand;
     }
 
-    public int allocationPriority() {
-        return 1;
-    }
+    public abstract int allocationPriority();
+
+    public abstract void displayDetails();
 }
