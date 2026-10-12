@@ -1,0 +1,5 @@
+# Copy this file to db.properties and set your local MySQL credentials.
+# Do not commit real passwords to source control.
+db.url=jdbc:mysql://localhost:3306/smart_water_distribution?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+db.user=root
+db.password=CHANGE_ME

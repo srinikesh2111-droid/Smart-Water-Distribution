@@ -1,0 +1,17 @@
+MYSQL/JDBC SETUP — WINDOWS + VS CODE
+
+1. Install/start MySQL Server and open MySQL Workbench.
+2. Run database_schema.sql in Workbench. It creates smart_water_distribution and the required tables.
+3. Copy db.properties.example to db.properties in the project root.
+4. Edit db.properties with your actual MySQL username and password. Do not share this file.
+5. Obtain the official MySQL Connector/J archive: https://dev.mysql.com/downloads/connector/j/ . Extract mysql-connector-j-*.jar into the project's lib folder.
+   Alternative if Maven is installed and internet is available: mvn dependency:copy-dependencies -DoutputDirectory=lib
+6. In VS Code terminal at the project root, run:
+   javac -encoding UTF-8 -d out src/*.java
+   java -cp "out;lib/*" DatabaseConnectionTest
+7. Only if DatabaseConnectionTest prints PASS, start the UI:
+   java -cp "out;lib/*" SwingMain
+8. To run model regression tests (do not require MySQL):
+   java -ea -cp out ProjectSelfTest
+
+Database integration implementation is present, but live connection has not been tested in this build environment because MySQL Server, credentials and the Connector/J JAR were unavailable. The app deliberately falls back to in-memory mode when DB configuration/connection is unavailable.

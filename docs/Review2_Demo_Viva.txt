@@ -1,0 +1,24 @@
+SMART WATER DISTRIBUTION — 3–5 MINUTE DEMO AND VIVA NOTES
+
+DEMO ORDER
+1. Open the Swing dashboard and point out total remaining supply, allocated litres, unmet requests and failed pipeline count.
+2. Open Network Map. Explain that the map uses the same Pipeline objects as the BFS graph model.
+3. Allocate 2,500 L to A3 (Government Hospital). Show the reservoir balance, request table and history update.
+4. Set a reservoir dry or use a request larger than the remaining supply. Explain partial allocation and unmet litres.
+5. Run priority-based batch allocation. Explain Critical (3) > High (2) > Normal (1), with deterministic natural-ID tie-breaking. Run ID-order mode if time allows.
+6. Fail P9. Show the red dashed line and X/BROKEN marker, then use Check Path or area reachability table to show A9/A10 disconnection from R1.
+7. Repair P9. Show the line restore and pending requests being retried.
+8. Show maintenance queue, event log and allocation history.
+9. State limitations: graph reachability only, no hydraulic physics, in-memory data, database pending approval, GUI click-through needs manual validation.
+
+LIKELY VIVA QUESTIONS
+Q: Why BFS? A: It checks reachability in an unweighted graph using a queue and visited set; adjacency-list BFS is O(V+E), apart from the current implementation's repeated edge lookup.
+Q: Why an adjacency list? A: The network is sparse and the list stores only existing links.
+Q: How is over-allocation prevented? A: Reservoir.allocateWater caps delivery at remaining supply, and WaterRequest.recordAllocation caps cumulative delivery at the request's unmet amount.
+Q: How are priorities implemented? A: DemandArea subclasses override allocationPriority(); the policy orders critical, high, normal and applies deterministic ID tie-breaking.
+Q: What happens when a pipe fails? A: The edge remains in the topology but BFS only traverses it if its Pipeline is working, so it is excluded from reachable paths.
+Q: Is this a hydraulic simulator? A: No. It models connectivity and simplified allocation, not pressure, leakage or pipe capacity.
+Q: Does data persist after restart? A: Not currently; the state is in memory. Database integration is pending confirmation of permitted technology.
+Q: What tests were run? A: Compilation and 38 dependency-free model checks on OpenJDK 21. Full GUI click automation was not performed; we manually verify the visible interactions on the demo machine.
+
+DO NOT CLAIM: database integration, persistent storage, measured performance, real-world water savings, or fully automated GUI tests unless these are subsequently implemented and verified.

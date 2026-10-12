@@ -1,0 +1,79 @@
+@startuml
+skinparam classAttributeIconSize 0
+class SwingMain {
+  - network: WaterNetwork
+  - policy: WaterAllocationPolicy
+  - requests: List<WaterRequest>
+  - maintenanceQueue: Queue<MaintenanceRequest>
+  + main(String[]): void
+  + createNetwork(): WaterNetwork
+}
+class Main { + main(String[]): void }
+class MySqlPersistence {
+  - properties: Properties
+  + initializeAndLoad(...): void
+  + saveSnapshot(...): void
+  + testConnection(): String
+}
+class WaterNetwork {
+  - reservoirs: Map<String, Reservoir>
+  - areas: Map<String, DemandArea>
+  - pipelines: List<Pipeline>
+  + isReachable(String, String): boolean
+  + getPath(String, String): List<String>
+  + chooseReservoirForArea(String): Reservoir
+  + failPipeline(String): boolean
+  + repairPipeline(String): boolean
+}
+class Reservoir {
+  - capacity: int
+  - remainingSupply: int
+  + allocateWater(int): int
+  + resetDailySupply(): void
+}
+abstract class DemandArea {
+  - id: String
+  - name: String
+  - demand: int
+  + allocationPriority(): int
+}
+class ResidentialArea
+class CriticalInstitution
+class HighPriorityArea
+class Pipeline {
+  - working: boolean
+  + markFailed(): void
+  + repair(): void
+}
+class WaterRequest {
+  - requestedLitres: int
+  - allocatedLitres: int
+  - unmetLitres: int
+  + recordAllocation(int): void
+  + isComplete(): boolean
+}
+class MaintenanceRequest {
+  - resolved: boolean
+  + markResolved(): void
+}
+interface WaterAllocationPolicy {
+  + orderAreas(Collection<DemandArea>, boolean): List<DemandArea>
+}
+class DefaultWaterAllocationPolicy
+DemandArea <|-- ResidentialArea
+DemandArea <|-- CriticalInstitution
+DemandArea <|-- HighPriorityArea
+WaterAllocationPolicy <|.. DefaultWaterAllocationPolicy
+WaterNetwork o-- Reservoir
+WaterNetwork o-- DemandArea
+WaterNetwork o-- Pipeline
+SwingMain --> MySqlPersistence
+MySqlPersistence --> WaterNetwork : saves/restores state
+MySqlPersistence --> WaterRequest : persists requests
+MySqlPersistence --> MaintenanceRequest : persists tickets
+SwingMain --> WaterNetwork
+SwingMain --> WaterAllocationPolicy
+SwingMain o-- WaterRequest
+SwingMain o-- MaintenanceRequest
+Main --> WaterNetwork
+@enduml

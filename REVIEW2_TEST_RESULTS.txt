@@ -1,0 +1,20 @@
+Smart Water Distribution Management — Review 2 Test Results
+Environment: OpenJDK 21.0.12
+
+PASS: javac -encoding UTF-8 -d out src/*.java
+PASS: java -ea -cp out ProjectSelfTest
+Result: 38 model-level regression checks passed, 0 failed.
+Coverage: 2 reservoirs / 10 demand areas / 12 pipelines; BFS reachability and paths; supply limits and daily reset; partial request tracking and bounds; zero/negative allocations; pipeline failure/repair; unreachable branch behaviour; deterministic priority and natural ID ordering.
+
+Database code status:
+- MySqlPersistence.java added with JDBC schema creation, first-run network seeding, state/history restoration, and transactional snapshot persistence.
+- database_schema.sql and db.properties.example added.
+- pom.xml declares com.mysql:mysql-connector-j:9.5.0.
+- DatabaseConnectionTest.java and run-db-check.bat added.
+- Live MySQL integration NOT VERIFIED in this environment: no configured MySQL server, local credentials, or Connector/J JAR were available. The DB smoke test reports NOT CONFIGURED until the user follows DATABASE_SETUP.txt.
+
+GUI verification:
+- Java source compilation is verified.
+- Full automated click-by-click GUI testing was not performed. Manually verify allocation, snapshot refresh, map fault/repair rendering, persistence after restart, and maintenance/history restoration on the Windows review laptop.
+
+Known limitation: if DB is not configured or reachable, the application continues in in-memory mode. Do not claim a successful live database test until DatabaseConnectionTest prints PASS.
